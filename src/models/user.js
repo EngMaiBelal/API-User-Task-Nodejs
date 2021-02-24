@@ -2,56 +2,6 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 
-
-//without mysheme 
-// const User = mongoose.model('User',{
-//     name:{
-//         type:String,
-//         required:true,
-//         trim:true
-//     },
-//     age:{
-       
-//         type:Number,
-//         default:20,
-//         validate(value){
-//             if(value<0){
-//                 // must not same (required in age ----> error automatic)
-//                 throw new Error ('Age must be positive number')
-//             }
-            
-//         }
-//     },
-//     email:{
-//         type:String,
-//         required:true,
-//         unique:true,
-//         lowercase:true,
-//         validate(value){
-//             if(!validator.isEmail(value)){
-//                 throw new Error('Email is required')
-//             }
-//         }
-//     },
-//     password:{
-//         type:String,
-//         required:true,
-//         // lowercase:true,
-//         minlength: 6,
-//         validate(value){
-//             if(value.toLowerCase().includes('password')){
-//                 throw new Error('Email is required')
-                
-//             }
-//             // if(value.length>8 || value==="password" || value==="PASSWORD"||){
-//                 // throw new Error('Email is required')
-
-//             // }
-//         }
-
-//     }
-// })
-
 // with schema
 const userSchema = mongoose.Schema({
     name:{
@@ -106,7 +56,7 @@ const userSchema = mongoose.Schema({
         type:Buffer
     }
 })
-///////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
 
 // Relation (tasks not save in database)
 
@@ -126,7 +76,7 @@ userSchema.virtual('tasks',{
 
 
 
-////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 
 // Doing pre  or  post
 // modelWare
@@ -141,7 +91,7 @@ userSchema.pre('save',async function(next){
     next()
 
 })
-/////////////////
+/////////////////////////////////////////////////////////////////////////////////
 
 //find by credintalis -->
 
@@ -158,7 +108,7 @@ userSchema.statics.findByCredentials = async(email,password)=>{
     }
     return user
 }
-/////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 // Authorization --> sign up
 // Authentication --> login (Check user is authorized)
 
@@ -175,7 +125,7 @@ userSchema.methods.generateToken = async function(){
     return token
 }
 
-////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 //Hide private Delete
 
 userSchema.methods.toJSON =function(){
@@ -191,8 +141,9 @@ userSchema.methods.toJSON =function(){
 
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
+//must defination in last
 
-
-const User = mongoose.model('User',userSchema); //must defination in last
+const User = mongoose.model('User',userSchema); 
 
 module.exports = User
