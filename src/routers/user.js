@@ -5,24 +5,9 @@ const auth = require('../middleware/auth.js')
 const multer = require('multer')
 
 
-// router.post('/users',(req,res)=>{
-//     console.log('req.body')
-//     res.send('testing')
-// })
-////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// post
-
-// router.post('/users',(req,res)=>{
-//     const user = new User(req.body)
-//     user.save().then(()=>{
-//         const token = user.generateToken()
-//         // to show in post man
-//         res.status(200).send({user,token})
-//     }).catch((error)=>{
-//         res.status(400).send(error)
-//     })
-// })   -------> error token empty
+// Post
 
 router.post('/users', async(req,res)=>{
     const user = new User(req.body)
@@ -37,14 +22,9 @@ router.post('/users', async(req,res)=>{
     }
 })
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-///////////////////////////////
-
-// Get
+// Get all
 
 router.get('/users',(req,res)=>{
     User.find({}).then((user)=>{
@@ -54,30 +34,10 @@ router.get('/users',(req,res)=>{
     })
 })
 
-////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Get by id
 
-// router.get('/users/:id',(req,res)=>{
-//     // console.log(req.params)
-//     // res.send('testing')
-//     const _id =req.params.id
-//     console.log(_id)
-
-//     User.findById(_id).then((user)=>{
-//         console.log("kkk;;;")
-//        if(!user){
-//            console.log("kkk")
-//             return res.status(400).send('undefined id')
-//        }
-//        res.status(200).send(user)
-//     }).catch((error)=>{
-//         res.status(500).send(error)
-//     })
-// })
-
-///////////////////
-//get
 router.get('/users/:id',auth,(req,res)=>{
     console.log(req.params)
     const _id = req.params.id
@@ -92,69 +52,9 @@ router.get('/users/:id',auth,(req,res)=>{
 
 })
 
-////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//update
-
-// router.patch('/users/:id' ,async(req,res)=>{
-//     const _id=req.params.id
-//     try{
-
-//         const user = await User.findByIdAndUpdate(_id,req.body,{
-//             new:true,
-//             runValidators:true
-//         })
-//         if(!user){
-//             return res.send('no user found')
-//         }
-//         res.status(200).send(user)
-        
-//     }catch{
-//         res.status(400).send('Error has occured')
-//     }
-// })
-
-
-///////////////////////////
-// update with some restrictions
-
-
-// problem in hash
-// router.patch('/users/:id', async(req,res)=>{
-//     // access key
-//     const updates = Object.keys(req.body) //['name','age','password','email']
-//     console.log(updates)
-
-//     const allawedupdates = ['name','password']
-
-//     var isValid = updates.every((update)=> allawedupdates.includes(update))
-    
-//     // console.log(isValid)
-//     if(!isValid){
-//        return res.status(400).send('cant not update')
-//     }
-//     const _id=req.params.id
-//     try{
-
-//         const user = await User.findByIdAndUpdate(_id,req.body,{
-//             new:true,
-//             runValidators:true
-//         })
-//         if(!user){
-//             return res.send('no user found')
-//         }
-//         res.status(200).send(user)
-        
-//     }catch{
-//         res.status(400).send('Error has occured')
-//     }
-
-// })
-
-
-
-
-
+// Update
 
 router.patch('/users/:id', async(req,res)=>{
     // access key
@@ -173,7 +73,7 @@ router.patch('/users/:id', async(req,res)=>{
     try{
 
         const user = await User.findById(_id)
-        console.log(user) //return user كله
+        console.log(user) //return all users
         updates.forEach((update)=>user[update]=req.body[update])
         await user.save()
 
@@ -190,9 +90,9 @@ router.patch('/users/:id', async(req,res)=>{
 })
 
 
-//////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//delete
+// Delete
 
 router.delete('/users/:id',auth,(req,res)=>{
     console.log(req.params)
@@ -212,9 +112,9 @@ router.delete('/users/:id',auth,(req,res)=>{
 
 
 
-/////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// login
+// Login
 
  router.post('/users/login',async (req,res)=>{
      try{
@@ -231,15 +131,17 @@ router.delete('/users/:id',auth,(req,res)=>{
      }
  })
 
-///////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Profile
 
 router.get('/profile',auth,(req,res)=>{
     res.send(req.user)
 })
 
-////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//logout
+// Logout
 
 // req.user.tokens --> array
 
@@ -257,7 +159,9 @@ router.post('/logout',auth,async(req,res)=>{
     }
 
 })
-////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //logout all
 
 router.post('/logoutAll',auth,async(req,res)=>{
@@ -271,9 +175,10 @@ router.post('/logoutAll',auth,async(req,res)=>{
     }
 
 })
-/////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// delete profile
+// Delete Profile
+
 router.delete('/profile',auth,async(req,res)=>{
     try{
         await req.user.remove()
@@ -284,9 +189,9 @@ router.delete('/profile',auth,async(req,res)=>{
     }
 
 })
-////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//update
+// Update
 
 router.patch('/profile', auth, async(req,res)=>{
     try{
@@ -305,11 +210,11 @@ router.patch('/profile', auth, async(req,res)=>{
 
 })
 
-/////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//image router
-// const multer = require('multer')
-///config
+// Image Router
+// Config
+
 const uploads = multer({
     // dest:'images',  //to load in visual
     limits:{
@@ -333,14 +238,6 @@ router.post('/profile/avatar',auth,uploads.single('avatar'),async(req,res)=>{
         res.send(e)
     }
 })
-
-
-
-
-
-
-
-
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 module.exports = router
